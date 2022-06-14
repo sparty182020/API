@@ -1,0 +1,4 @@
+{
+    "typescript.preferences.includePackageJsonAutoImports": "on",
+    "js/ts.implicitProjectConfig.checkJs": true
+}

@@ -2,15 +2,21 @@ const express = require('express')
 const crypto = require('node:crypto')
 const path = require('path')
 const util = require('./util-fuctions')
+const ccf = require('./crypto')
 const { key, adminLogin } = require('./config.json')
 
 const app = express();
 const PORT = 8081
 app.use(express.json())
 
+// Homepage
+app.all('/', (req, res, next) => {
+    sendHTMLFile('index.html', res, 200)
+})
+
 // Authentication
 app.all('*', (req, res, next) => {
-    if (!req.headers.authorization) {res.status(401).end().destroy(); return}
+    if (!req.headers.authorization) { res.status(401).end().destroy(); return }
     const auth = Buffer.from(req.headers.authorization.slice(6), 'base64').toString('utf-8')
     const [username, password] = auth.split(':')
     if (username == adminLogin.username && password == adminLogin.password) {
@@ -99,7 +105,9 @@ app.post('/login/', (req, res) => {
 })
 
 app.listen(PORT, () => {
-    console.log(`Server is listening on port ${PORT}`)
+    console.log(
+        `Server is listening at localhost:${PORT}, 127.0.0.1:${PORT}, and sparty18api.ddnsfree.com:${PORT}`
+    )
 })
 
 function sendHTMLFile(filename, res, status) {
